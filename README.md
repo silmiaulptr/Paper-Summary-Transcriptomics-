@@ -9,7 +9,7 @@ Repositori ini berisi kumpulan tugas, mini-proyek, dan proyek akhir (*Capstone P
 
 ---
 
-## 🏆 *Capstone Project* (Proyek Akhir)
+## *Capstone Project* (Proyek Akhir)
 Sebagai penugasan akhir program ini, saya melakukan analisis komparatif ekspresi gen secara mandiri. 
 
 * **Topik Riset:** Analisis Transkriptomik MPXV (Mpox Virus) Clade IIb (Mock vs MPXV).
@@ -63,7 +63,7 @@ Proyek ini menggunakan bahasa pemrograman **R / RStudio** dengan memanfaatkan be
   * `umap` / `prcomp` (PCA): Digunakan pada tahap analisis komponen utama (reduksi dimensi) untuk memvalidasi pemisahan pola varians antar grup sampel.
   * `ggrepel` (implisit pada `geom_label_repel`): Berperan dalam anotasi teks *Volcano Plot* agar label spesifik gen (Top DEGs) otomatis terhindar dari tumpang tindih (*overlapping*).
 
-## 💡 Cara Mereproduksi Analisis
+## Cara Mereproduksi Analisis
 Jika Anda ingin mengeksekusi skrip R di komputer Anda:
 1. *Clone* repositori ini menggunakan Git: 
    ```bash
