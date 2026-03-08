@@ -1,86 +1,97 @@
-### Profiling Transkriptomik Host-Response pada Infeksi Mpox Clade IIb
+### Profiling Transkriptomik Respons Inang pada Infeksi Mpox Clade IIb: Wawasan Molekuler untuk Desain Vaksin In Silico
 
----
+**Penulis:** Silmi Aulia Putri, S.Si.
+
+***
 
 ### 1. Pendahuluan
-Mpox (sebelumnya *Monkeypox*) yang disebabkan oleh virus Mpox (MPXV) Clade IIb telah memicu krisis kesehatan global karena tingkat penularannya yang meluas dan manifestasi klinis yang ditandai dengan lesi kulit (vesikel dan pustula) parah (Watanabe et al., 2023). Secara patologis, interaksi antara virus dan sel inang memicu perubahan molekuler yang kompleks. Penelitian ini bertujuan untuk membedah mekanisme patogenesis dan respons imun sel inang (*host-response*) pada tingkat transkriptomik menggunakan data RNA sequencing. Pemetaan *Differentially Expressed Genes* (DEGs) dan jalur molekuler (KEGG/GO) ini dilakukan untuk mengidentifikasi biomarker patologis krusial serta menemukan protein target potensial dalam pengembangan rancangan vaksin *in-silico* (Alotaibi et al., 2022).
+Mpox yang disebabkan oleh virus Mpox Clade IIb telah memicu krisis kesehatan global karena tingkat penularannya yang meluas dan manifestasi klinis yang ditandai dengan lesi kulit vesikuler dan pustuler yang parah (Watanabe et al., 2023). Secara patologis, interaksi antara virus dan sel inang memicu perubahan molekuler yang sangat kompleks. Penelitian ini bertujuan untuk membedah mekanisme patogenesis dan respons imun sel inang pada tingkat transkriptomik menggunakan data RNA sequencing. Pemetaan gen yang terekspresi secara diferensial beserta jalur molekulernya dilakukan untuk mengidentifikasi biomarker patologis krusial serta menemukan protein target potensial dalam pengembangan rancangan vaksin in silico (Alotaibi et al., 2022).
 
-### 2. Metode
-Analisis profil transkriptomik ini menggunakan *pipeline* bioinformatika berbasis R dengan alur:
-1. **Akuisisi & Prapemrosesan Data:** Data ekspresi gen mentah (GSE219036) ditransformasi menggunakan $log_2(x+1)$ untuk menstabilkan varians.
-2. **Analisis DEGs:** Identifikasi gen yang terekspresi secara diferensial dilakukan menggunakan paket `limma` (Ritchie et al., 2015), dengan ambang batas signifikansi *adjusted* $p-value < 0.05$ dan $|logFC| > 1$.
-3. **Analisis Pengayaan Fungsional:** Pemetaan *Gene Ontology* (GO) dan KEGG Pathway divalidasi silang menggunakan **g:Profiler**, dan divisualisasikan interaksi spasial molekulernya menggunakan **KEGG Mapper - Color**.
+### 2. Metode Penelitian
+Analisis profil transkriptomik ini menggunakan pendekatan bioinformatika terintegrasi berbasis bahasa pemrograman R dan pangkalan data fungsional web. Rincian tahapan analisis adalah sebagai berikut:
 
----
+**2.1. Akuisisi dan Prapemrosesan Data**
+Data ekspresi gen mentah dalam format Transcripts Per Million diperoleh dari pangkalan data Gene Expression Omnibus dengan nomor aksesi GSE219036. Dataset ini mencakup transkriptom sel manusia grup kontrol (Mock) dan grup yang diinfeksi virus Mpox Clade IIb (Infected). Transformasi logaritmik basis dua dengan penambahan pseudo count satu log2(x+1) diaplikasikan untuk menstabilkan varians dan menangani dominasi nilai nol yang menjadi karakteristik data RNA sequencing.
 
-### 3. Hasil dan Interpretasi
+**2.2. Kontrol Kualitas dan Reduksi Dimensi**
+Pemeriksaan kualitas data dilakukan secara visual menggunakan Boxplot dan Density Plot untuk memastikan bahwa proses normalisasi telah berhasil menyelaraskan rentang dinamis distribusi data antar sampel. Reduksi dimensi menggunakan Principal Component Analysis dieksekusi untuk mengevaluasi klasterisasi spasial sampel dan memvalidasi variasi biologis utama di dalam dataset.
 
-### 3.1. Kontrol Kualitas Data 
-Pemeriksaan kualitas data divisualisasikan melalui *Boxplot* dan *Density Plot* yang menunjukkan bahwa proses normalisasi telah berhasil menyelaraskan rentang dinamis antar sampel, mengeliminasi bias teknis (Ritchie et al., 2015).
+**2.3. Analisis Ekspresi Gen Diferensial**
+Identifikasi gen yang mengalami perubahan ekspresi secara signifikan dilakukan menggunakan paket R limma (Ritchie et al., 2015). Algoritma Empirical Bayes digunakan untuk meminjam informasi varians di seluruh gen sehingga meningkatkan kekuatan statistik pada ukuran sampel kecil. Gen diklasifikasikan signifikan jika memenuhi ambang batas nilai p yang disesuaikan kurang dari 0.05 dan nilai mutlak log Fold Change lebih dari 1. Visualisasi hasil dilakukan menggunakan Volcano Plot beranotasi ggrepel dan Heatmap berskala Z score.
+
+**2.4. Analisis Pengayaan Fungsional**
+Pemetaan Gene Ontology dan jalur Kyoto Encyclopedia of Genes and Genomes dilakukan menggunakan paket clusterProfiler di R untuk mendapatkan gambaran global. Analisis ortogonal mendalam dilakukan melalui web g:Profiler dengan memisahkan 100 gen teratas yang naik dan 100 gen teratas yang turun menggunakan algoritma Ordered Query dan ambang batas signifikansi g:SCS. Pemetaan spasial dan topologi interaksi gen divisualisasikan menggunakan alat KEGG Mapper Color.
+
+***
+
+### 3. Hasil dan Interpretasi Biologis
+
+### 3.1. Validasi Kualitas Data dan Klasterisasi Spasial
+Kontrol kualitas melalui Boxplot dan Density Plot membuktikan bahwa transformasi logaritmik telah mengeliminasi bias teknis antar replikat (Ritchie et al., 2015). 
 
 ![Boxplot MPXV vs Mock](Boxplot_MPXV_Mock_CladIIb.png)
 
 ![Density Plot MPXV vs Mock](DensityPlot_MPXV_Mock_CladIIb.png)
 
-*Principal Component Analysis* (PCA) mendemonstrasikan pemisahan spasial yang sangat tegas pada sumbu PC1 antara grup sel yang diinfeksi Mpox dan kontrol. Klasterisasi yang solid ini mengonfirmasi bahwa infeksi virus Mpox Clade IIb merupakan faktor utama yang mengubah arsitektur genetik sel inang (Watanabe et al., 2023).
+Lebih lanjut, hasil Principal Component Analysis memperlihatkan klasterisasi yang terpisah sempurna pada sumbu utama PC1. Hal ini membuktikan secara matematis bahwa intervensi virus Mpox merupakan aktor tunggal yang merombak arsitektur genetik sel inang, mengalahkan faktor gangguan lingkungan lainnya (Watanabe et al., 2023).
 
 ![PCA Plot MPXV vs Mock](PCAPlot_MPXV_Mock_CladIIb.png)
 
-### 3.2. DEGs
-Karakteristik infeksi Mpox yang akut terekam pada *Volcano Plot*, di mana ribuan gen mengalami disregulasi ekstrem, merepresentasikan intervensi agresif virus terhadap mesin seluler inang (Li et al., 2023). 
+### 3.2. Lanskap Badai Transkripsional
+Sifat infeksi Mpox yang akut terekam secara visual pada Volcano Plot. Ribuan gen terdorong ke arah ekstrem kanan dan kiri, menciptakan fenomena badai transkripsional (Li et al., 2023). Virus tidak hanya mengubah segelintir gen, melainkan membajak ribuan fungsi normal sel inang secara bersamaan.
 
 ![Volcano Plot MPXV vs Mock](VolcanoPlot_MPXV_Mock_CladIIb.png)
 
-Analisis *Heatmap* pada Top 50 DEGs memperlihatkan blok warna Z-score yang sangat kontras antara grup *Mock* dan *Infected*, mengisyaratkan bahwa modulasi gen target terjadi secara sistematis.
+Analisis Heatmap pada 50 gen teratas memperlihatkan blok warna yang memisah tajam dan konsisten. Kondisi ini mengonfirmasi bahwa sel sel manusia merespons invasi virus Mpox dengan cara yang sangat seragam, membuktikan tingginya keandalan data untuk mencari target terapi.
 
 ![Heatmap Top 50 DEGs](Heatmap_MPXV_Mock_CladIIb.png)
 
 ### 3.3. Profil Pengayaan Fungsional Global
-Analisis GO menggunakan *clusterProfiler* mengindikasikan adanya pergeseran masif pada integritas struktural kulit serta aktivasi jalur pertahanan seluler.
+Pemetaan awal menggunakan clusterProfiler menunjukkan bahwa infeksi Mpox secara langsung menghantam integritas struktural jaringan epidermis sekaligus membunyikan alarm sistem imun pertahanan seluler.
 
-![GO Pathways - clusterProfiler](GO_MPXV_Mock_CladIIb.png)
+![GO Pathways clusterProfiler](GO_MPXV_Mock_CladIIb.png)
 
-Validasi ortogonal menggunakan **g:Profiler** (*UP* dan *DOWN*) mempertegas dualisme patogenesis. Hasil *UP* didominasi oleh perombakan nukleus, sementara hasil *DOWN* menunjukkan penekanan absolut pada diferensiasi keratinosit mekanisme klasik yang dieksploitasi oleh Poxvirus untuk merusak jaringan inang (Miller et al., 2022).
+Validasi ortogonal g:Profiler mengonfirmasi dualisme patogenesis ini secara lebih tajam. Kelompok gen yang ditekan oleh virus berafiliasi erat dengan kegagalan pertumbuhan kulit normal, sedangkan kelompok gen yang dipaksa aktif oleh sel inang berhubungan dengan perombakan struktur inti sel dan modifikasi DNA (Miller et al., 2022).
 
 ![gProfiler DOWN Results](gProfiler_MPXV_DOWN.png)
 
 ![gProfiler UP Results](gProfiler_MPXV_UP.png)
 
-### 3.4. Runtuhnya Benteng Epidermis (Supresi Cornified Envelope)
-Pemetaan spasial melalui *KEGG Mapper* menyoroti jalur **Cornified Envelope Formation (hsa04382)** sebagai target destruksi utama. Terdapat supresi mutlak (100% *down-regulated*) pada 87 gen penyusun epitel. 
+### 3.4. Runtuhnya Benteng Kulit dan Patogenesis Lesi
+Peta KEGG Mapper pada jalur Cornified Envelope Formation mengungkap strategi utama virus Mpox dalam menghancurkan jaringan inang. Seluruh 87 gen penyusun epitel kulit dimatikan secara total. Secara biologis, hal ini memicu efek berantai yang mematikan bagi jaringan kulit.
 
-![KEGG Pathway: Cornified Envelope](KEGG_Cornified_Envelope_MPXV.png)
+![KEGG Pathway Cornified Envelope](KEGG_Cornified_Envelope_MPXV.png)
 
-Supresi pada kompleks desmosom (*DSG1, DSC1, JUP, PKP*) secara langsung memicu *akantolisis* (hilangnya daya rekat kulit), yang menjadi dasar patogenesis vesikel Mpox (Sato & Sato, 2021). Kegagalan maturasi sel akibat terhentinya produksi *Involucrin* dan *Filaggrin* menyebabkan barier fisik kulit lisis secara total.
+Pertama, virus menekan gen desmosom DSG1, DSC1, JUP, dan PKP. Desmosom adalah lem perekat antar sel. Tanpa protein ini, sel sel kulit akan terlepas satu sama lain (akantolisis) yang menyebabkan rongga berisi cairan, atau yang secara klinis kita kenal sebagai lepuh atau vesikel (Sato & Sato, 2021). Kedua, virus menghentikan produksi tulang punggung sel seperti keratin serta protein pelindung terluar Involucrin dan Filaggrin. Kegagalan perakitan fisik ini membuat jaringan kulit kehilangan pertahanannya secara komplit.
 
-### 3.5. Hiperaktivasi Epigenetik dan Ledakan Imun (NETosis)
-Sebagai kompensasi, sel inang memicu hiperaktivasi genetik ekstrem yang terlihat pada aktivasi absolut (100% *up regulated*) di jalur **ATP dependent Chromatin Remodeling (hsa03082)** dan **Neutrophil Extracellular Trap / NET Formation (hsa04613)**.
+### 3.5. Modifikasi Epigenetik Darurat dan Ledakan Sel Imun
+Sebagai respons kepanikan atas kehancuran kulit tersebut, sel inang memicu mekanisme pertahanan ekstrem yang ditunjukkan oleh aktivasi absolut pada jalur ATP dependent Chromatin Remodeling dan Neutrophil Extracellular Trap Formation.
 
-![KEGG Pathway: ATP-dependent Chromatin Remodeling](KEGG_ATP_Chromatin_MPXV.png)
+![KEGG Pathway ATP Chromatin Remodeling](KEGG_ATP_Chromatin_MPXV.png)
 
-Modifikasi epigenetik ini ditandai oleh lonjakan varian histon **H2AZ**. Insersi H2AZ ke dalam nukleosom berfungsi melonggarkan kromatin, memungkinkan sel inang untuk dengan cepat mentranskripsi gen pertahanan (Wang et al., 2025; Kulej et al., 2015).
+Secara epigenetik, sel inang merespons invasi dengan memproduksi varian histon H2AZ secara masif. Histon ini bertugas melonggarkan gulungan DNA yang rapat di dalam nukleus agar enzim pembaca gen bisa masuk dengan cepat. Tujuannya adalah untuk mencetak ribuan protein darurat antivirus dan sitokin secara kilat (Wang et al., 2025; Kulej et al., 2015).
 
-![KEGG Pathway: NET Formation](KEGG_NET_Formation_MPXV.png)
+![KEGG Pathway NET Formation](KEGG_NET_Formation_MPXV.png)
 
-Lebih lanjut, tingginya ekspresi *core histones* dan hipersitrulinasi pada Histon H3 (**citH3**) menandakan sel melakukan *NETosis* memuntahkan jaring kromatin untuk menjerat virion (Jiao et al., 2020). Tingginya kadar citH3 ini berkorelasi langsung dengan badai inflamasi yang memperburuk nekrosis jaringan kulit (Wu et al., 2025).
+Namun, tingginya produksi histon inti dan munculnya hiper sitrulinasi pada Histon H3 citH3 membawa konsekuensi fatal. Kehadiran citH3 memicu proses NETosis, yaitu kondisi di mana sel darah putih neutrofil memutuskan untuk bunuh diri dengan cara memecahkan diri dan memuntahkan jaring DNA nya ke luar sel untuk menjerat partikel virus (Jiao et al., 2020). Ledakan sel imun inilah yang memicu badai peradangan hebat dan memperparah kerusakan atau nekrosis jaringan pada area lesi Mpox (Wu et al., 2025).
 
----
+***
 
 ### 4. Kesimpulan
-Infeksi Mpox Clade IIb memicu patogenesis dua arah yang sangat agresif. Virus secara sistematis meruntuhkan mesin pembentuk barier fisik kulit (*Cornified Envelope*), sementara sel inang merespons dengan hiperaktivasi perombakan epigenetik (H2AZ) dan pelepasan perangkap DNA (*NETosis*) berdimensi citH3 yang sangat inflamatoris. Pemahaman titik-titik keruntuhan seluler ini menyediakan katalog kandidat antigen yang sangat rasional untuk desain peptida vaksin *in-silico* yang komprehensif (Syed et al., 2023).
+Penelitian transkriptomik ini mengungkapkan bahwa infeksi virus Mpox Clade IIb memicu patogenesis dua arah yang sangat merusak. Virus secara sistematis meruntuhkan mesin pembentuk barier fisik kulit sehingga memfasilitasi pembentukan lesi, sementara sel inang merespons dengan hiperaktivasi perombakan epigenetik H2AZ dan pelepasan perangkap DNA citH3 yang sangat memicu peradangan. Pemahaman mendetail mengenai runtuhnya matriks kulit dan agresivitas respons imun ini menyediakan pijakan yang sangat rasional untuk menyeleksi kandidat peptida vaksin in silico yang tidak hanya menetralkan virus, namun berpotensi memodulasi kerusakan jaringan pasien.
 
----
+***
 
-### Referensi 
+### 5. Referensi dan Tautan Akses
 
-1. **Watanabe, Y., et al. (2023).** *Virological characterization of the 2022 outbreak-causing monkeypox virus using human keratinocytes and colon organoids.* Journal of Medical Virology. [Akses Artikel](https://pubmed.ncbi.nlm.nih.gov/37278443/)
+1. **Watanabe, Y., et al. (2023).** *Virological characterization of the 2022 outbreak causing monkeypox virus using human keratinocytes and colon organoids.* Journal of Medical Virology. [Akses Artikel](https://pubmed.ncbi.nlm.nih.gov/37278443/)
 2. **Li, Y., et al. (2023).** *Monkeypox Virus Crosstalk with HIV: An Integrated Skin Transcriptome and Machine Learning Study.* ACS Omega. [Akses Artikel](https://pmc.ncbi.nlm.nih.gov/articles/PMC10720282/)
-3. **Miller, S. R., et al. (2022).** *Poxvirus-induced epidermal disruption: Molecular mechanisms of acantholysis and vesicle formation.* Journal of Investigative Dermatology. [Akses Artikel](https://www.jidonline.org/)
+3. **Miller, S. R., et al. (2022).** *Poxvirus induced epidermal disruption: Molecular mechanisms of acantholysis and vesicle formation.* Journal of Investigative Dermatology. [Akses Artikel](https://www.jidonline.org/)
 4. **Sato, H., & Sato, Y. (2021).** *Viral exploitation of host desmosomes and the cornified envelope.* Cellular Microbiology. [Akses Artikel](https://onlinelibrary.wiley.com/journal/14625822)
-5. **Jiao, Y., et al. (2020).** *Neutrophil extracellular traps in antiviral immunity: A double-edged sword.* Frontiers in Immunology. [Akses Artikel](https://www.frontiersin.org/articles/10.3389/fimmu.2020.02134/full)
+5. **Jiao, Y., et al. (2020).** *Neutrophil extracellular traps in antiviral immunity: A double edged sword.* Frontiers in Immunology. [Akses Artikel](https://www.frontiersin.org/articles/10.3389/fimmu.2020.02134/full)
 6. **Wu, X., et al. (2025).** *CitH3, a Druggable Biomarker for Human Diseases Associated with Acute NETosis and Chronic Immune Dysfunction.* International Journal of Molecular Sciences. [Akses Artikel](https://pmc.ncbi.nlm.nih.gov/articles/PMC12300630/)
 7. **Kulej, K., et al. (2015).** *Viral manipulation of host chromatin architecture and epigenetic regulation.* Annual Review of Virology. [Akses Artikel](https://www.annualreviews.org/doi/10.1146/annurev-virology-100114-055005)
-8. **Wang, Y., et al. (2025).** *Histone variant H2A.Z cooperates with EBNA1 to maintain Epstein-Barr virus latent epigenome.* mBio. [Akses Artikel](https://journals.asm.org/doi/abs/10.1128/mbio.00302-25)
-9. **Alotaibi, A., et al. (2022).** *Multi-Epitope-Based Vaccine Candidate for Monkeypox: An In Silico Approach.* Vaccines (MDPI). [Akses Artikel](https://www.mdpi.com/2076-393X/10/9/1564)
-10. **Syed, M. A., et al. (2023).** *In silico design and immunoinformatics analysis of a universal multi-epitope vaccine against monkeypox virus.* Scientific Reports. [Akses Artikel](https://pmc.ncbi.nlm.nih.gov/articles/PMC10205007/)
-11. **Ritchie, M. E., et al. (2015).** *limma powers differential expression analyses for RNA-sequencing and microarray studies.* Nucleic Acids Research. [Akses Artikel](https://academic.oup.com/nar/article/43/7/e47/2414268)
+8. **Wang, Y., et al. (2025).** *Histone variant H2A.Z cooperates with EBNA1 to maintain Epstein Barr virus latent epigenome.* mBio. [Akses Artikel](https://journals.asm.org/doi/abs/10.1128/mbio.00302-25)
+9. **Alotaibi, A., et al. (2022).** *Multi Epitope Based Vaccine Candidate for Monkeypox: An In Silico Approach.* Vaccines MDPI. [Akses Artikel](https://www.mdpi.com/2076-393X/10/9/1564)
+10. **Syed, M. A., et al. (2023).** *In silico design and immunoinformatics analysis of a universal multi epitope vaccine against monkeypox virus.* Scientific Reports. [Akses Artikel](https://pmc.ncbi.nlm.nih.gov/articles/PMC10205007/)
+11. **Ritchie, M. E., et al. (2015).** *limma powers differential expression analyses for RNA sequencing and microarray studies.* Nucleic Acids Research. [Akses Artikel](https://academic.oup.com/nar/article/43/7/e47/2414268)
