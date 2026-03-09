@@ -23,7 +23,8 @@ Sebagai penugasan puncak, saya merancang dan mengeksekusi analisis komparatif ek
 * **Laporan Komprehensif:** Silakan tinjau arsitektur riset, visualisasi publikasi, dan interpretasi patogenesis di dokumen **[Analisis Transkriptomik MPXV CladIIb](Analisis_Transkriptomik_MPXV_CladIIb.md)**.
 * **Skrip R:** [`Pipeline_MPCV_Mock_CladIIb.R`](Pipeline_MPCV_Mock_CladIIb.R)
 * **Dataset Mentah:** [`Dataset_GSE219036_TPM_for_GEO_upload_skin.txt.gz`](Dataset_GSE219036_TPM_for_GEO_upload_skin.txt.gz)
-* **Video Presentasi:** [Tautan YouTube Akan Segera Hadir]
+* **PPT Presentasi:** [`PPT`](PPT_CAPSTONE_PROJECT_BRSP.pdf)
+* **Video Presentasi:** [`Video Presentasi`](https://youtu.be/-IUtCahX-Nc?si=BUGiukpE8oHOQeED)
 
 ---
 
