@@ -3,52 +3,94 @@
 ***
 
 ### 1. Pendahuluan
-Mpox yang disebabkan oleh virus Mpox Clade IIb telah memicu krisis kesehatan global karena tingkat penularannya yang meluas dan manifestasi klinis yang ditandai dengan lesi kulit vesikuler dan pustuler yang parah (Watanabe et al., 2023). Secara patologis, interaksi antara virus dan sel inang memicu perubahan molekuler yang sangat kompleks. Penelitian ini bertujuan untuk membedah mekanisme patogenesis dan respons imun sel inang pada tingkat transkriptomik menggunakan data RNA sequencing. Pemetaan gen yang terekspresi secara diferensial beserta jalur molekulernya dilakukan untuk mengidentifikasi biomarker patologis krusial serta menemukan protein target potensial dalam pengembangan rancangan vaksin in silico (Alotaibi et al., 2022).
+Mpox yang disebabkan oleh virus Mpox Clade IIb telah memicu krisis kesehatan global karena tingkat penularannya yang meluas dan manifestasi klinis yang ditandai dengan lesi kulit vesikuler dan pustuler yang parah (Watanabe et al., 2023). Secara patologis, interaksi antara virus dan sel inang memicu perubahan molekuler yang sangat kompleks. Penelitian ini bertujuan untuk membedah mekanisme patogenesis dan respons imun sel inang pada tingkat transkriptomik menggunakan data RNA sequencing. Pemetaan gen yang terekspresi secara diferensial beserta jalur molekulernya dilakukan untuk mengidentifikasi biomarker patologis krusial serta menemukan protein target potensial dalam pengembangan rancangan vaksin in silico (Abdi et al., 2022).
 
 ### 2. Metode Penelitian
 Analisis profil transkriptomik ini menggunakan pendekatan bioinformatika terintegrasi berbasis bahasa pemrograman R dan pangkalan data fungsional web. Rincian tahapan analisis adalah sebagai berikut:
 
+
 ```mermaid
+
 graph TD
+
     %% Pengaturan Tema Publikasi
+
     classDef default fill:#ffffff,stroke:#000000,stroke-width:1.5px,color:#000000,font-family:Arial,font-size:13px;
+
     classDef database fill:#f2f2f2,stroke:#000000,stroke-width:2px;
+
     classDef decision fill:#ffffff,stroke:#000000,stroke-width:1.5px;
+
     classDef output fill:#f8f9fa,stroke:#000000,stroke-width:1.5px;
+
     classDef highlight fill:#ffffff,stroke:#000000,stroke-width:2.5px,font-weight:bold;
 
+
+
 subgraph S1_2 ["2.1 & 2.2"]
+
         A[("Dataset GSE219036: <br/>TPM RNA-seq")]:::database --> B["Grup Sampel: <br/>Mock vs Infected"]
+
         B --> D["Visualisasi QC: <br/>Boxplot & Density Plot"]
+
         B --> E["Reduksi Dimensi: <br/>PCA Plot"]
+
     end
+
+
 
     %% Aliran menuju Analisis
+
     D --> F["Empirical Bayes <br/>Modeling (limma)"]
+
     E --> F
 
+
+
     subgraph S3_4 ["2.3 & 2.4"]
+
         F --> G{"Kriteria Seleksi: <br/>adj.P < 0.05 & <br/>|logFC| > 1"}:::decision
+
         G -->|Memenuhi| H["Daftar Gen <br/>Signifikan (DEGs)"]:::highlight
+
         
+
         %% Panah ke samping kanan untuk Visualisasi
+
         H --> I(["Visualisasi: <br/>Volcano Plot & Heatmap"]):::output
+
         
+
         %% Panah ke bawah untuk Analisis Pengayaan
+
         H --> J["Analisis Global (R): <br/>clusterProfiler"]
+
         H --> L["Analisis Ortogonal (Web): <br/>g:Profiler"]
+
         
+
         J --> K["Gene Ontology & <br/>KEGG Pathway"]
+
         L --> M["Ordered Query: <br/>Top 100 UP/DOWN"]
+
         
+
         K --> N(["Output Akhir: <br/>KEGG Mapper & Dotplot"]):::output
+
         M --> N
+
     end
 
+
+
     %% Apply Styles
+
     class A database;
+
     class G decision;
+
     class I,N output;
+
 ```
 
 **2.1. Akuisisi dan Prapemrosesan Data**
@@ -73,6 +115,7 @@ Kontrol kualitas melalui Boxplot dan Density Plot membuktikan bahwa transformasi
 ![Boxplot MPXV vs Mock](Boxplot_MPXV_Mock_CladIIb.png)
 
 ![Density Plot MPXV vs Mock](DensityPlot_MPXV_Mock_CladIIb.png)
+
 *Gambar 1. Boxplot dan Density Plot.*
 
 Lebih lanjut, hasil Principal Component Analysis memperlihatkan klasterisasi yang terpisah sempurna pada sumbu utama PC1. Hal ini membuktikan secara matematis bahwa intervensi virus Mpox merupakan aktor tunggal yang merombak arsitektur genetik sel inang, mengalahkan faktor gangguan lingkungan lainnya (Watanabe et al., 2023).
@@ -82,7 +125,7 @@ Lebih lanjut, hasil Principal Component Analysis memperlihatkan klasterisasi yan
 *Gambar 2. PCA Plot.*
 
 ### 3.2. Lanskap Badai Transkripsional
-Sifat infeksi Mpox yang akut terekam secara visual pada Volcano Plot. Ribuan gen terdorong ke arah ekstrem kanan dan kiri, menciptakan fenomena badai transkripsional (Li et al., 2023). Virus tidak hanya mengubah segelintir gen, melainkan membajak ribuan fungsi normal sel inang secara bersamaan.
+Sifat infeksi Mpox yang akut terekam secara visual pada Volcano Plot. Ribuan gen terdorong ke arah ekstrem kanan dan kiri, menciptakan fenomena badai transkripsional (Cai et al., 2023). Virus tidak hanya mengubah segelintir gen, melainkan membajak ribuan fungsi normal sel inang secara bersamaan.
 
 ![Volcano Plot MPXV vs Mock](VolcanoPlot_MPXV_Mock_CladIIb.png)
 
@@ -101,7 +144,7 @@ Pemetaan awal menggunakan clusterProfiler menunjukkan bahwa infeksi Mpox secara 
 
 *Gambar 5. Top 10 KEGG dan GO.*
 
-Validasi ortogonal g:Profiler mengonfirmasi dualisme patogenesis ini secara lebih tajam. Kelompok gen yang ditekan oleh virus berafiliasi erat dengan kegagalan pertumbuhan kulit normal, sedangkan kelompok gen yang dipaksa aktif oleh sel inang berhubungan dengan perombakan struktur inti sel dan modifikasi DNA (Miller et al., 2022).
+Validasi ortogonal g:Profiler mengonfirmasi dualisme patogenesis ini secara lebih tajam. Kelompok gen yang ditekan oleh virus berafiliasi erat dengan kegagalan pertumbuhan kulit normal, sedangkan kelompok gen yang dipaksa aktif oleh sel inang berhubungan dengan perombakan struktur inti sel dan modifikasi DNA (Brennan et al., 2023).
 
 ![gProfiler DOWN Results](gProfiler_MPXV_DOWN.png)
 
@@ -118,7 +161,7 @@ Peta KEGG Mapper pada jalur Cornified Envelope Formation mengungkap strategi uta
 
 *Gambar 8. KEGG Pathway Cornified Envelope.*
 
-Pertama, virus menekan gen desmosom DSG1, DSC1, JUP, dan PKP. Desmosom adalah lem perekat antar sel. Tanpa protein ini, sel sel kulit akan terlepas satu sama lain (akantolisis) yang menyebabkan rongga berisi cairan, atau yang secara klinis kita kenal sebagai lepuh atau vesikel (Sato & Sato, 2021). Kedua, virus menghentikan produksi tulang punggung sel seperti keratin serta protein pelindung terluar Involucrin dan Filaggrin. Kegagalan perakitan fisik ini membuat jaringan kulit kehilangan pertahanannya secara komplit.
+Pertama, virus menekan gen desmosom DSG1, DSC1, JUP, dan PKP. Desmosom adalah lem perekat antar sel. Tanpa protein ini, sel sel kulit akan terlepas satu sama lain (akantolisis) yang menyebabkan rongga berisi cairan, atau yang secara klinis kita kenal sebagai lepuh atau vesikel (Shetty & Gokul, 2012). Kedua, virus menghentikan produksi tulang punggung sel seperti keratin serta protein pelindung terluar Involucrin dan Filaggrin. Kegagalan perakitan fisik ini membuat jaringan kulit kehilangan pertahanannya secara komplit.
 
 ### 3.5. Modifikasi Epigenetik Darurat dan Ledakan Sel Imun
 Sebagai respons kepanikan atas kehancuran kulit tersebut, sel inang memicu mekanisme pertahanan ekstrem yang ditunjukkan oleh aktivasi absolut pada jalur ATP dependent Chromatin Remodeling dan Neutrophil Extracellular Trap Formation.
@@ -127,13 +170,13 @@ Sebagai respons kepanikan atas kehancuran kulit tersebut, sel inang memicu mekan
 
 *Gambar 9. KEGG Pathway  ATP Chromatine.*
 
-Secara epigenetik, sel inang merespons invasi dengan memproduksi varian histon H2AZ secara masif. Histon ini bertugas melonggarkan gulungan DNA yang rapat di dalam nukleus agar enzim pembaca gen bisa masuk dengan cepat. Tujuannya adalah untuk mencetak ribuan protein darurat antivirus dan sitokin secara kilat (Wang et al., 2025; Kulej et al., 2015).
+Secara epigenetik, sel inang merespons invasi dengan memproduksi varian histon H2AZ secara masif. Histon ini bertugas melonggarkan gulungan DNA yang rapat di dalam nukleus agar enzim pembaca gen bisa masuk dengan cepat. Tujuannya adalah untuk mencetak ribuan protein darurat antivirus dan sitokin secara kilat (Castro-Muñoz et al., 2025; Tsai & Cullen, 2020).
 
 ![KEGG Pathway NET Formation](KEGG_NET_Formation_MPXV.png)
 
- *Gambar 10. KEGG Pathway  NET Formation.*
+*Gambar 10. KEGG Pathway  NET Formation.*
 
-Namun, tingginya produksi histon inti dan munculnya hiper sitrulinasi pada Histon H3 citH3 membawa konsekuensi fatal. Kehadiran citH3 memicu proses NETosis, yaitu kondisi di mana sel darah putih neutrofil memutuskan untuk bunuh diri dengan cara memecahkan diri dan memuntahkan jaring DNA nya ke luar sel untuk menjerat partikel virus (Jiao et al., 2020). Ledakan sel imun inilah yang memicu badai peradangan hebat dan memperparah kerusakan atau nekrosis jaringan pada area lesi Mpox (Wu et al., 2025).
+Namun, tingginya produksi histon inti dan munculnya hiper sitrulinasi pada Histon H3 citH3 membawa konsekuensi fatal. Kehadiran citH3 memicu proses NETosis, yaitu kondisi di mana sel darah putih neutrofil memutuskan untuk bunuh diri dengan cara memecahkan diri dan memuntahkan jaring DNA nya ke luar sel untuk menjerat partikel virus (Eckhart et al., 2013). Ledakan sel imun inilah yang memicu badai peradangan hebat dan memperparah kerusakan atau nekrosis jaringan pada area lesi Mpox (Chen et al., 2025).
 
 ***
 
