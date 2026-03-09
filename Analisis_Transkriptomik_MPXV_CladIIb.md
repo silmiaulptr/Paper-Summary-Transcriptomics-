@@ -1,7 +1,5 @@
 ### Profiling Transkriptomik Respons Inang pada Infeksi Mpox Clade IIb: Wawasan Molekuler untuk Desain Vaksin In Silico
 
-**Penulis:** Silmi Aulia Putri, S.Si.
-
 ***
 
 ### 1. Pendahuluan
@@ -9,6 +7,49 @@ Mpox yang disebabkan oleh virus Mpox Clade IIb telah memicu krisis kesehatan glo
 
 ### 2. Metode Penelitian
 Analisis profil transkriptomik ini menggunakan pendekatan bioinformatika terintegrasi berbasis bahasa pemrograman R dan pangkalan data fungsional web. Rincian tahapan analisis adalah sebagai berikut:
+
+```mermaid
+graph TD
+    %% Pengaturan Tema Publikasi
+    classDef default fill:#ffffff,stroke:#000000,stroke-width:1.5px,color:#000000,font-family:Arial,font-size:13px;
+    classDef database fill:#f2f2f2,stroke:#000000,stroke-width:2px;
+    classDef decision fill:#ffffff,stroke:#000000,stroke-width:1.5px;
+    classDef output fill:#f8f9fa,stroke:#000000,stroke-width:1.5px;
+    classDef highlight fill:#ffffff,stroke:#000000,stroke-width:2.5px,font-weight:bold;
+
+subgraph S1_2 ["2.1 & 2.2"]
+        A[("Dataset GSE219036: <br/>TPM RNA-seq")]:::database --> B["Grup Sampel: <br/>Mock vs Infected"]
+        B --> D["Visualisasi QC: <br/>Boxplot & Density Plot"]
+        B --> E["Reduksi Dimensi: <br/>PCA Plot"]
+    end
+
+    %% Aliran menuju Analisis
+    D --> F["Empirical Bayes <br/>Modeling (limma)"]
+    E --> F
+
+    subgraph S3_4 ["2.3 & 2.4"]
+        F --> G{"Kriteria Seleksi: <br/>adj.P < 0.05 & <br/>|logFC| > 1"}:::decision
+        G -->|Memenuhi| H["Daftar Gen <br/>Signifikan (DEGs)"]:::highlight
+        
+        %% Panah ke samping kanan untuk Visualisasi
+        H --> I(["Visualisasi: <br/>Volcano Plot & Heatmap"]):::output
+        
+        %% Panah ke bawah untuk Analisis Pengayaan
+        H --> J["Analisis Global (R): <br/>clusterProfiler"]
+        H --> L["Analisis Ortogonal (Web): <br/>g:Profiler"]
+        
+        J --> K["Gene Ontology & <br/>KEGG Pathway"]
+        L --> M["Ordered Query: <br/>Top 100 UP/DOWN"]
+        
+        K --> N(["Output Akhir: <br/>KEGG Mapper & Dotplot"]):::output
+        M --> N
+    end
+
+    %% Apply Styles
+    class A database;
+    class G decision;
+    class I,N output;
+```
 
 **2.1. Akuisisi dan Prapemrosesan Data**
 Data ekspresi gen mentah dalam format Transcripts Per Million diperoleh dari pangkalan data Gene Expression Omnibus dengan nomor aksesi GSE219036. Dataset ini mencakup transkriptom sel manusia grup kontrol (Mock) dan grup yang diinfeksi virus Mpox Clade IIb (Infected). Transformasi logaritmik basis dua dengan penambahan pseudo count satu log2(x+1) diaplikasikan untuk menstabilkan varians dan menangani dominasi nilai nol yang menjadi karakteristik data RNA sequencing.
